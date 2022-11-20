@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="fab_margin">32dp</dimen>
+    <dimen name="textSize_normal">9pt</dimen>
+    <dimen name="textSize_heading">13pt</dimen>
+    <dimen name="d_xl">20sp</dimen>
+    <dimen name="d_l">10sp</dimen>
+    <dimen name="d_m">5sp</dimen>
+</resources>

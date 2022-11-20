@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Foodie</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="main_fragment_label">Foodie!</string>
+    <string name="second_fragment_label">Foodie!</string>
+    <string name="ex_food_name">BBQ</string>
+    <string name="ex_food_price">Price: 120.000 VND</string>
+    <string name="msg_save_successfully">Item is saved successfully!</string>
+    <string name="msg_save_unsuccessfully">Item is inserted successfully!</string>
+</resources>
