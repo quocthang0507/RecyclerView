@@ -41,11 +41,15 @@ public class Dataset {
         return dataset.get(id);
     }
 
+    public void delete(int id) {
+        dataset.remove(id);
+    }
+
     public void update(FoodItem item) {
         getById(item.ID).Name = item.Name;
         getById(item.ID).Price = item.Price;
         getById(item.ID).Unit = item.Unit;
-//        getById(item.ID).ImgThumbPath = item.ImgThumbPath;
+        getById(item.ID).ImgThumbPath = item.ImgThumbPath;
     }
 
     public void clear() {

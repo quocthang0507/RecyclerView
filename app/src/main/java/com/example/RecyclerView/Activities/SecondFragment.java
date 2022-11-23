@@ -1,10 +1,22 @@
 package com.example.RecyclerView.Activities;
 
+import static android.os.Build.VERSION.SDK_INT;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +24,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.RecyclerView.Classes.Dataset;
 import com.example.RecyclerView.Classes.FoodItem;
 import com.example.RecyclerView.R;
 import com.example.RecyclerView.databinding.FragmentSecondBinding;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.IOException;
 
 public class SecondFragment extends Fragment implements View.OnClickListener {
 
@@ -28,6 +43,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
     private Button button_save;
     private int action_code = -1;
     private FragmentSecondBinding binding;
+    private ActivityResultLauncher<Intent> launchChooser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +96,32 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         button_save = getActivity().findViewById(R.id.button_save);
         // An another way to assign click event handler for button
         button_save.setOnClickListener(this);
+
+        launchChooser = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null && data.getData() != null) {
+                            Uri selectedImageUri = data.getData();
+                            Bitmap selectedImageBitmap;
+                            try {
+                                selectedImageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                                imgFood.setImageBitmap(selectedImageBitmap);
+                                imgFood.setTag(selectedImageUri.toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+//        imgFood.setOnClickListener(v -> {
+//            Intent intent = new Intent();
+//            intent.setType("image/*");
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            launchChooser.launch(intent);
+//        });
     }
 
     @Override
@@ -93,11 +135,11 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         // Update an existing item
         if (action_code != -1) {
             Dataset.getInstance().update(new FoodItem(action_code, name, price, imgPath, unit));
-            Snackbar.make(getActivity().findViewById(R.id.button_save), R.string.msg_save_successfully, Snackbar.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.msg_save_successfully, Toast.LENGTH_LONG).show();
         } else {
             // Create a new item
             Dataset.getInstance().add(new FoodItem(action_code, name, price, imgPath, unit));
-            Snackbar.make(getActivity().findViewById(R.id.button_save), R.string.msg_save_unsuccessfully, Snackbar.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.msg_save_unsuccessfully, Toast.LENGTH_LONG).show();
         }
 
         // Go back to first fragment

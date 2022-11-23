@@ -41,6 +41,8 @@ public class MainFragment extends Fragment {
         Log.d(getContext().getPackageName(), "onViewCreated MainFragment");
 
         super.onViewCreated(view, savedInstanceState);
+
+        registerForContextMenu(view);
     }
 
     @Override

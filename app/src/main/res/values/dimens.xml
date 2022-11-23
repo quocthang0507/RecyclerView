@@ -3,6 +3,7 @@
     <dimen name="textSize_normal">9pt</dimen>
     <dimen name="textSize_heading">13pt</dimen>
     <dimen name="d_xl">20sp</dimen>
-    <dimen name="d_l">10sp</dimen>
-    <dimen name="d_m">5sp</dimen>
+    <dimen name="d_l">15sp</dimen>
+    <dimen name="d_m">10sp</dimen>
+    <dimen name="d_s">5sp</dimen>
 </resources>

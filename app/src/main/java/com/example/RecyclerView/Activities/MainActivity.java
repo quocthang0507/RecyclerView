@@ -1,9 +1,14 @@
 package com.example.RecyclerView.Activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import androidx.navigation.NavController;
@@ -38,46 +43,21 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment navHostFragment =
-                        (NavHostFragment) getSupportFragmentManager()
-                                .findFragmentById(R.id.nav_host_fragment_content_main);
+        binding.fab.setOnClickListener(view -> {
+            NavHostFragment navHostFragment =
+                    (NavHostFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.nav_host_fragment_content_main);
 
-                // Pass value between activity and fragment
-                Bundle bundle = new Bundle();
-                bundle.putInt(SecondFragment.EXTRA_ACTION_CODE, -1);
+            // Pass value between activity and fragment
+            Bundle bundle = new Bundle();
+            bundle.putInt(SecondFragment.EXTRA_ACTION_CODE, -1);
 
-                // Navigate from first fragment (home screen) to second fragment (inserting/updating screen)
-                NavController navController = navHostFragment.getNavController();
-                navController.navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
-            }
+            // Navigate from first fragment (home screen) to second fragment (inserting/updating screen)
+            NavController navController1 = navHostFragment.getNavController();
+            navController1.navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
         });
 
         generateDataset();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -96,5 +76,4 @@ public class MainActivity extends AppCompatActivity {
         Dataset.getInstance().add(new FoodItem(2, "Chicken", 60000, "chicken", "combo"));
         Dataset.getInstance().add(new FoodItem(3, "Hot dog", 60000, "hotdog", "pack"));
     }
-
 }

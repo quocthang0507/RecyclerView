@@ -1,5 +1,7 @@
 package com.example.RecyclerView.Classes;
 
+import java.io.Serializable;
+
 /**
  * The FoodItem class
  */
