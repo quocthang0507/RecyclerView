@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.RecyclerView.Classes.Dataset;
 import com.example.RecyclerView.Classes.FoodItem;
+import com.example.RecyclerView.Classes.Utils;
 import com.example.RecyclerView.R;
 import com.example.RecyclerView.databinding.FragmentSecondBinding;
 
@@ -125,23 +126,29 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         // Get values
+        int id = Integer.parseInt(editText_id.getText().toString());
         String name = editText_name.getText().toString();
         String unit = editText_unit.getText().toString();
-        int price = Integer.parseInt(editText_price.getText().toString());
+        String price = editText_price.getText().toString();
         String imgPath = imgFood.getTag().toString();
 
-        // Update an existing item
-        if (action_code != -1) {
-            Dataset.getInstance().update(new FoodItem(action_code, name, price, imgPath, unit));
-            Toast.makeText(getActivity(), R.string.msg_save_successfully, Toast.LENGTH_LONG).show();
-        } else {
-            // Create a new item
-            Dataset.getInstance().add(new FoodItem(action_code, name, price, imgPath, unit));
-            Toast.makeText(getActivity(), R.string.msg_save_unsuccessfully, Toast.LENGTH_LONG).show();
-        }
+        // If there are not empty
+        if (!Utils.isOneNullOrWhitespace(name, unit, price)) {
+            if (action_code != -1) {
+                // Update an existing item
+                Dataset.getInstance().update(new FoodItem(action_code, name, Integer.parseInt(price), imgPath, unit));
+                Toast.makeText(getActivity(), R.string.msg_save_successfully, Toast.LENGTH_LONG).show();
+            } else {
+                // Create a new item
+                Dataset.getInstance().add(new FoodItem(id, name, Integer.parseInt(price), imgPath, unit));
+                Toast.makeText(getActivity(), R.string.msg_save_unsuccessfully, Toast.LENGTH_LONG).show();
+            }
 
-        // Go back to first fragment
-        NavHostFragment.findNavController(SecondFragment.this)
-                .navigate(R.id.action_SecondFragment_to_FirstFragment);
+            // Go back to first fragment
+            NavHostFragment.findNavController(SecondFragment.this)
+                    .navigate(R.id.action_SecondFragment_to_FirstFragment);
+        } else {
+            Toast.makeText(getActivity(), R.string.msg_missing, Toast.LENGTH_LONG).show();
+        }
     }
 }

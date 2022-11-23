@@ -30,13 +30,23 @@ public class Utils {
         if (cursor != null) {
             cursor.moveToFirst();
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            if (cursor != null && cursor.moveToFirst()) {
-                String path = cursor.getString(column_index);
-                cursor.close();
-                return path;
-            }
-            return null;
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
         }
         return null;
+    }
+
+    public static boolean isNullOrWhitespace(final String string) {
+        return string == null || string.isEmpty() || string.trim().isEmpty();
+    }
+
+    public static boolean isOneNullOrWhitespace(String... strs) {
+        for (String s : strs) {
+            if (isNullOrWhitespace(s))
+                return true;
+        }
+        return false;
     }
 }
