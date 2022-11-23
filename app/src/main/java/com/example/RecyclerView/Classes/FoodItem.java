@@ -1,7 +1,5 @@
 package com.example.RecyclerView.Classes;
 
-import java.io.Serializable;
-
 /**
  * The FoodItem class
  */
@@ -10,12 +8,12 @@ public class FoodItem {
     public int ID;
     public String Name;
     public int Price;
-    public String ImgThumbPath;
+    public String ImgThumb;
     public String Unit;
 
-    public FoodItem(int id, String name, int price, String imgThumbPath, String unit) {
+    public FoodItem(int id, String name, int price, String imgThumb, String unit) {
         this.ID = id;
-        this.ImgThumbPath = imgThumbPath;
+        this.ImgThumb = imgThumb;
         this.Name = name;
         this.Price = price;
         this.Unit = unit;

@@ -30,10 +30,12 @@ public class Utils {
         if (cursor != null) {
             cursor.moveToFirst();
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-            cursor.close();
-            return path;
+            if (cursor != null && cursor.moveToFirst()) {
+                String path = cursor.getString(column_index);
+                cursor.close();
+                return path;
+            }
+            return null;
         }
         return null;
     }

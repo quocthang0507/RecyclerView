@@ -3,13 +3,13 @@ package com.example.RecyclerView.Classes;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -100,18 +100,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         FoodItem selectedItem = dataset.get(position);
 
         holder.textView_name.setText(selectedItem.Name);
-
         holder.textView_price.setText("Price: " + Utils.formatCurrency(selectedItem.Price));
 
-        if (!selectedItem.ImgThumbPath.contains("/storage")) {
-            int imgId = context.getResources().getIdentifier(selectedItem.ImgThumbPath,
-                    "drawable", context.getPackageName());
+        if (!selectedItem.ImgThumb.contains("content://")) { // If ImgThumb is a file name
+            int imgId = context.getResources().getIdentifier(selectedItem.ImgThumb, "drawable", context.getPackageName());
             holder.imgFood.setImageResource(imgId);
-        } else {
-            File imgFile = new File(selectedItem.ImgThumbPath);
-            holder.imgFood.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath()));
+        } else { // If ImgThumb is a Uri
+            holder.imgFood.setImageURI(Uri.parse(selectedItem.ImgThumb));
         }
-        holder.imgFood.setTag(selectedItem.ImgThumbPath);
+        holder.imgFood.setTag(selectedItem.ImgThumb);
 
         holder.btnEdit.setOnClickListener(view -> {
             AppCompatActivity activity = (AppCompatActivity) view.getContext();

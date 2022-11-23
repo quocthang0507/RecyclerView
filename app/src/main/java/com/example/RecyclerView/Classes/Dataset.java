@@ -49,7 +49,7 @@ public class Dataset {
         getById(item.ID).Name = item.Name;
         getById(item.ID).Price = item.Price;
         getById(item.ID).Unit = item.Unit;
-        getById(item.ID).ImgThumbPath = item.ImgThumbPath;
+        getById(item.ID).ImgThumb = item.ImgThumb;
     }
 
     public void clear() {

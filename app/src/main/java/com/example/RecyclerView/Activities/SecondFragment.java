@@ -1,9 +1,5 @@
 package com.example.RecyclerView.Activities;
 
-import static android.os.Build.VERSION.SDK_INT;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -13,9 +9,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -29,12 +23,9 @@ import android.widget.Toast;
 
 import com.example.RecyclerView.Classes.Dataset;
 import com.example.RecyclerView.Classes.FoodItem;
-import com.example.RecyclerView.Classes.Utils;
 import com.example.RecyclerView.R;
 import com.example.RecyclerView.databinding.FragmentSecondBinding;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
 import java.io.IOException;
 
 public class SecondFragment extends Fragment implements View.OnClickListener {
@@ -72,14 +63,13 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
             editText_name.setText(selectedItem.Name);
             editText_price.setText(String.valueOf(selectedItem.Price));
             editText_unit.setText(selectedItem.Unit);
-            if (!selectedItem.ImgThumbPath.contains("/storage")) {
-                int imgId = getResources().getIdentifier(selectedItem.ImgThumbPath, "drawable", getActivity().getPackageName());
+            if (!selectedItem.ImgThumb.contains("content://")) { // If ImgThumb is a file name
+                int imgId = getResources().getIdentifier(selectedItem.ImgThumb, "drawable", getActivity().getPackageName());
                 imgFood.setImageResource(imgId);
-            } else {
-                File imgFile = new File(selectedItem.ImgThumbPath);
-                imgFood.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath()));
+            } else { // If ImgThumb is a Uri
+                imgFood.setImageURI(Uri.parse(selectedItem.ImgThumb));
             }
-            imgFood.setTag(selectedItem.ImgThumbPath);
+            imgFood.setTag(selectedItem.ImgThumb);
         } else {
             editText_id.setText(String.valueOf(Dataset.getInstance().getMaxId() + 1));
             imgFood.setTag("");
@@ -116,7 +106,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                             try {
                                 selectedImageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
                                 imgFood.setImageBitmap(selectedImageBitmap);
-                                imgFood.setTag(Utils.getImageFilePath(getContext(), selectedImageUri));
+                                imgFood.setTag(selectedImageUri);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
