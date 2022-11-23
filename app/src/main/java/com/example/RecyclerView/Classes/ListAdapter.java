@@ -2,6 +2,7 @@ package com.example.RecyclerView.Classes;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.RecyclerView.Activities.SecondFragment;
 import com.example.RecyclerView.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -96,15 +98,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FoodItem selectedItem = dataset.get(position);
-        int imgId = context.getResources().getIdentifier(selectedItem.ImgThumbPath,
-                "drawable", context.getPackageName());
 
         holder.textView_name.setText(selectedItem.Name);
 
         holder.textView_price.setText("Price: " + Utils.formatCurrency(selectedItem.Price));
 
-        holder.imgFood.setImageResource(imgId);
-        holder.imgFood.setTag(imgId);
+        if (!selectedItem.ImgThumbPath.contains("/storage")) {
+            int imgId = context.getResources().getIdentifier(selectedItem.ImgThumbPath,
+                    "drawable", context.getPackageName());
+            holder.imgFood.setImageResource(imgId);
+        } else {
+            File imgFile = new File(selectedItem.ImgThumbPath);
+            holder.imgFood.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath()));
+        }
+        holder.imgFood.setTag(selectedItem.ImgThumbPath);
 
         holder.btnEdit.setOnClickListener(view -> {
             AppCompatActivity activity = (AppCompatActivity) view.getContext();

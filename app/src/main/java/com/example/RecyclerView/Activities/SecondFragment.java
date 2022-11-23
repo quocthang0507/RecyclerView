@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,10 +29,12 @@ import android.widget.Toast;
 
 import com.example.RecyclerView.Classes.Dataset;
 import com.example.RecyclerView.Classes.FoodItem;
+import com.example.RecyclerView.Classes.Utils;
 import com.example.RecyclerView.R;
 import com.example.RecyclerView.databinding.FragmentSecondBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SecondFragment extends Fragment implements View.OnClickListener {
@@ -69,8 +72,13 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
             editText_name.setText(selectedItem.Name);
             editText_price.setText(String.valueOf(selectedItem.Price));
             editText_unit.setText(selectedItem.Unit);
-            int imgId = getResources().getIdentifier(selectedItem.ImgThumbPath, "drawable", getActivity().getPackageName());
-            imgFood.setImageResource(imgId);
+            if (!selectedItem.ImgThumbPath.contains("/storage")) {
+                int imgId = getResources().getIdentifier(selectedItem.ImgThumbPath, "drawable", getActivity().getPackageName());
+                imgFood.setImageResource(imgId);
+            } else {
+                File imgFile = new File(selectedItem.ImgThumbPath);
+                imgFood.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath()));
+            }
             imgFood.setTag(selectedItem.ImgThumbPath);
         } else {
             editText_id.setText(String.valueOf(Dataset.getInstance().getMaxId() + 1));
@@ -108,7 +116,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                             try {
                                 selectedImageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
                                 imgFood.setImageBitmap(selectedImageBitmap);
-                                imgFood.setTag(selectedImageUri.toString());
+                                imgFood.setTag(Utils.getImageFilePath(getContext(), selectedImageUri));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -116,12 +124,12 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
-//        imgFood.setOnClickListener(v -> {
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            launchChooser.launch(intent);
-//        });
+        imgFood.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            launchChooser.launch(intent);
+        });
     }
 
     @Override
